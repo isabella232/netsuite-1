@@ -26,10 +26,15 @@ module NetSuite
         logger: logger,
         log_level: log_level,
         log: !silent, # turn off logging entirely if configured
-        endpoint: wsdl_domain ## setting endpoint based on wsdl_domain
+        endpoint: get_endpoint ## setting endpoint based on wsdl_domain
       }.update(params))
       cache_wsdl(client)
       return client
+    end
+
+    def get_endpoint
+      service_path = "/services/NetSuitePort_#{api_version}"
+      wsdl_domain.include?(service_path) ? wsdl_domain : wsdl_domain + service_path
     end
 
     def filters(list = nil)
